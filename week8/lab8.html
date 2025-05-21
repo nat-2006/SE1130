@@ -1,0 +1,254 @@
+Natalie Gardner
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 8 | Homework Assignment</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1a237e; /* Dark blue */
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Removes default table spacing */
+        }
+        td {
+            padding: 10px 0; /* Add padding to table cells */
+        }
+        label {
+            font-weight: bold;
+            color: #3f51b5; /* Indigo */
+            margin-right: 10px;
+            display: block; /* Makes label take full width */
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px); /* Adjust width to account for padding and border */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #3f51b5; /* Indigo */
+            outline: none;
+        }
+        input[type="button"] {
+            background-color: #3f51b5; /* Indigo */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block; /* Make button take full width */
+            width: 100%;
+            margin-top: 10px; /* Add some space above the button */
+        }
+        input[type="button"]:hover {
+            background-color: #303f9f; /* Darker Indigo */
+        }
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8eaf6; /* Light Indigo */
+            border-radius: 8px;
+            border: 1px solid #c5cae9; /* Lighter Indigo border */
+        }
+        #output div { /* Style for each person entry */
+            padding: 10px 0;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #9fa8da; /* Lighter Indigo for HR */
+            margin: 15px 0;
+        }
+        .person-entry {
+            line-height: 1.6;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1>List Of People</h1>
+        <p>
+            Please fill in the form and click the submit button.
+        </p>
+        <div>
+            <table>
+                <tr>
+                    <td><label for="first">First Name</label></td>
+                    <td><input id="first" type="text" name="first" placeholder="Ivan"></td>
+                </tr>
+                <tr>
+                    <td><label for="last">Last Name</label></td>
+                    <td><input id="last" type="text" name="last" placeholder="Drago"></td>
+                </tr>
+                <tr>
+                    <td></td> <td><input id="button" type="button" value="Submit"></td> </tr>
+            </table>
+        </div> <div id="output">
+            </div>
+    </div>
+
+	<script>
+	
+		//Store the elements (tags) in variables
+		const firstNameInput = document.getElementById('first');
+        const lastNameInput = document.getElementById('last');
+        const submitButton = document.getElementById('button');
+        const outputDiv = document.getElementById('output');
+
+		//Make an array to store the people
+		let people = [];
+
+		//Make the button clickable. When clicked it calls the calcAndDisplay function.
+		submitButton.addEventListener('click', calcAndDisplay);
+		
+		/*-----------------------------------------------------
+		Will add objects into the people array. 
+		Then will bubble sort the array and print each person to the screen.
+		The output should resemble: 
+			FIRST: Cersei
+			LAST: Lannister
+			_________________________
+			FIRST: Arya
+			LAST: Stark
+			_________________________
+			FIRST: Daenerys
+			LAST: Targaryen
+			_________________________
+		--------------------------------------------------------*/
+
+		function calcAndDisplay(e) // 'e' is the event object, not strictly needed here but good practice
+		{
+            // Prevent default form submission if it were a real form element
+            if (e && typeof e.preventDefault === 'function') {
+                 e.preventDefault();
+            }
+
+            // Get values from input fields
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+
+            // Basic validation: ensure fields are not empty
+            if (firstName === "" || lastName === "") {
+                // You could display an error message to the user here
+                // For now, just log to console and return
+                console.error("First name and last name cannot be empty.");
+                // Simple user feedback (replace with a nicer modal/message if desired)
+                const tempMsg = document.createElement('p');
+                tempMsg.textContent = "Please enter both first and last names.";
+                tempMsg.style.color = "red";
+                outputDiv.insertBefore(tempMsg, outputDiv.firstChild);
+                setTimeout(() => { if(outputDiv.contains(tempMsg)) outputDiv.removeChild(tempMsg); }, 3000);
+                return;
+            }
+
+			//Create an object called person.
+			//Add the following properties:
+			    //1. first: will be a string that uses the first Input's value
+				//2. last: will be a string that uses the last Input's value
+            var person = {
+                first: firstName,
+                last: lastName
+            };//end of person object
+
+			//Add the person object into the people array by using the .push() array method.
+			people.push(person);
+
+			//Bubble sort people on the last name
+            // The provided bubble sort is okay for small arrays, but for larger datasets,
+            // Array.prototype.sort() with a custom comparator is more efficient.
+            // people.sort((a, b) => a.last.localeCompare(b.last));
+            // Using the provided bubble sort for consistency with the original request:
+			for(let i=0; i < people.length-1; i++)
+			{
+				for(let j=0; j < people.length - 1 - i; j++) // Optimization: -i, as last i elements are already sorted
+				{
+					// Using localeCompare for more robust string comparison (handles accents, case, etc.)
+                    // but sticking to direct comparison as per original structure for simplicity.
+					if(people[j].last.toLowerCase() > people[j+1].last.toLowerCase()) // Compare in lowercase for case-insensitive sort
+					{
+						let temp = people[j];
+						people[j] = people[j+1];
+						people[j+1] = temp;
+					}
+				}
+			}//end of bubble sort algorithm!
+
+			//console.log the people array to check that the people array is formatted correctly and is populated with the correct objects
+			console.log("Current people array:", people);
+
+			//create a variable called 'outputString' that has an empty string value stored to 
+			let outputString = ""; // Changed from 'output' to 'outputString' to avoid conflict with outputDiv
+
+			//Loop through the objects in the people array
+			for(let i = 0; i < people.length; i++) // Corrected loop condition
+            {
+                outputString += '<div class="person-entry">'; // Add a container for each person for better styling
+				//Loop through each property in the object
+				for(const key in people[i]) // Use 'const' for block-scoped variable
+                {
+					//The output should use the key set to uppercase using the .toUpperCase() String method as a title and the value of the key.
+					//Output will resemble:
+					//FIRST: Ivan
+					//LAST: Drago
+					outputString += `${key.toUpperCase()}: ${people[i][key]}<br>`; // Using template literal for cleaner string construction
+                }
+                //add a <hr> to the output at the end of this outter loop so a horizontal rule is displayed inbetween each person being displayed to the screen.
+				if (i < people.length - 1) { // Add HR only if it's not the last person
+                    outputString += "<hr>";
+                }
+                outputString += '</div>'; // Close the person-entry div
+			}//end of loop going through people array to edit 'outputString'
+
+				//log the output string
+				console.log("Generated HTML output:", outputString);
+				//replace the outputDiv's inner HTML with the outputString
+				outputDiv.innerHTML = outputString;
+
+                // Clear the input fields for the next entry
+                firstNameInput.value = "";
+                lastNameInput.value = "";
+                firstNameInput.focus(); // Set focus back to the first name field
+		}
+	
+    </script>
+    
+</body>
+</html>
