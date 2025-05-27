@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Calculator</title>
+</head>
+<body>
+    <h1>Pay Calculator</h1>
+    <p>Check the browser's console (usually F12) and the alert box for pay details.</p>
+
+    <script>
+        // Gather user information using prompt()
+        let hourlyPayInput = prompt("Enter your hourly pay rate (e.g., 14.50):", "14.50");
+        let hoursWorkedInput = prompt("Enter hours worked per week (e.g., 32):", "32");
+        let taxRateInput = prompt("Enter your tax rate as a percentage (e.g., 20 for 20%):", "20");
+
+        // Convert prompted string values to numbers
+        let hourlyPay = Number(hourlyPayInput);
+        let hoursWorkedPerWeek = Number(hoursWorkedInput);
+        let taxRatePercentage = Number(taxRateInput);
+
+        // Define the period
+        const weeksInPeriod = 2;
+
+        // Perform calculations once
+        let totalHoursWorked = hoursWorkedPerWeek * weeksInPeriod;
+        let grossPay = totalHoursWorked * hourlyPay;
+        let taxRateDecimal = taxRatePercentage / 100;
+        let unclesSamsShare = grossPay * taxRateDecimal;
+        let netPay = grossPay - unclesSamsShare;
+
+        // Format for display (to two decimal places)
+        let grossPayFormatted = "$" + grossPay.toFixed(2);
+        let unclesSamsShareFormatted = "$" + unclesSamsShare.toFixed(2);
+        let netPayFormatted = "$" + netPay.toFixed(2);
+
+        // Prepare output strings
+        let outputMessage = "Gross Pay: " + grossPayFormatted + "\n" +
+                            "Uncle Sam's Share: " + unclesSamsShareFormatted + "\n" +
+                            "Net Pay: " + netPayFormatted;
+
+        // Display information using one alert()
+        alert(outputMessage);
+
+        // Display information using three console.log() calls
+        console.log("Gross Pay: " + grossPayFormatted);
+        console.log("Uncle Sam's Share: " + unclesSamsShareFormatted);
+        console.log("Net Pay: " + netPayFormatted);
+    </script>
+</body>
+</html>
